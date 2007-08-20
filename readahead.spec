@@ -11,8 +11,8 @@ Patch0:		readahead-1.3-lsb-init.patch
 # enable early readahead as soon there's at least 240Mb of RAM
 Patch1:		readahead-1.3-lower-memteset.patch
 Buildroot:      %{_tmppath}/%{name}-%{version}-root
-Requires(post):    /sbin/chkconfig
-Requires(pre):     /sbin/chkconfig
+Requires(post):    chkconfig
+Requires(pre):     chkconfig
 Requires:	procps /bin/gawk
 
 BuildRequires:	e2fsprogs-devel
