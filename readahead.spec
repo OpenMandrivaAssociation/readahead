@@ -18,9 +18,6 @@ Requires:	procps /bin/gawk
 BuildRequires:	e2fsprogs-devel audit-devel
 BuildRequires: pkgconfig
 
-AC_CHECK_LIB(audit, audit_open)
-AC_CHECK_LIB(auparse, auparse_init)
-
 
 Obsoletes:	kernel-utils
 
