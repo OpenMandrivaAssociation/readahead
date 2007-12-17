@@ -10,7 +10,6 @@ Source0:	readahead-%{version}.tar.bz2
 Patch0:		readahead-1.3-lsb-init.patch
 # enable early readahead as soon there's at least 240Mb of RAM
 Patch1:		readahead-1.3-lower-memteset.patch
-Buildroot:      %{_tmppath}/%{name}-%{version}-root
 Requires(post):    chkconfig
 Requires(pre):     chkconfig
 Requires:	procps /bin/gawk
