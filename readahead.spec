@@ -1,7 +1,7 @@
 Summary:        Read a preset list of files into memory
 Name:           readahead
 Version:        1.4.1
-Release:        %mkrel 3
+Release:        %mkrel 4
 Group:          System/Configuration/Boot and Init
 License:        GPL
 URL:		http://cvs.fedora.redhat.com/viewcvs/devel/readahead/
