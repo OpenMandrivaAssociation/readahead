@@ -1,6 +1,6 @@
 Summary:        Read a preset list of files into memory
 Name:           readahead
-Version:        1.4.4
+Version:        1.4.5
 Release:        %mkrel 1
 Group:          System/Configuration/Boot and Init
 License:        GPL
