@@ -6,8 +6,6 @@ Group:          System/Configuration/Boot and Init
 License:        GPL
 URL:		http://cvs.fedora.redhat.com/viewcvs/devel/readahead/
 Source0:	readahead-%{version}.tar.bz2
-# enable early readahead as soon there's at least 240Mb of RAM
-Patch1:		readahead-1.3-lower-memteset.patch
 Buildroot:      %{_tmppath}/%{name}-%{version}-root
 Requires(post):    chkconfig
 Requires(pre):     chkconfig
@@ -26,7 +24,6 @@ needed. Its goal is to speed up the boot process.
 
 %prep
 %setup -q
-%patch1 -p0 -b .lowmem
 
 %build
 %configure2_5x --sbindir=/sbin
