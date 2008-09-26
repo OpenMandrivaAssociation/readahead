@@ -1,7 +1,7 @@
 Summary:        Read a preset list of files into memory
 Name:           readahead
 Version:        1.4.6
-Release:        %mkrel 2
+Release:        %mkrel 3
 Group:          System/Configuration/Boot and Init
 License:        GPLv2+
 URL:		https://hosted.fedoraproject.org/readahead
@@ -74,4 +74,9 @@ rm -f $RPM_BUILD_ROOT/etc/readahead.d/default.later
 if [ -f /etc/rc.d/init.d/readahead_early ]; then
   /sbin/chkconfig --del readahead_early > /dev/null 2>&1 
   /sbin/chkconfig --del readahead_later
+fi
+
+%post
+if [ "$1" = "1" ]; then
+ touch /.readahead_collect
 fi
