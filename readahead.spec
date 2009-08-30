@@ -2,8 +2,8 @@
 
 Summary:        Read a preset list of files into memory
 Name:           readahead
-Version:        1.4.9
-Release:        %mkrel 4
+Version:        1.5.0
+Release:        %mkrel 1
 Group:          System/Configuration/Boot and Init
 License:        GPLv2+
 URL:		https://hosted.fedoraproject.org/readahead
@@ -14,14 +14,14 @@ Source2:	default.early
 Patch0:		readahead-default.patch
 # (fc) 1.4.6-2mdv create a temp file to detect if collector is running, autodelect collector enabling file at end of collection
 Patch1:		readahead-1.4.6-autocollector.patch
-Buildroot:      %{_tmppath}/%{name}-%{version}-root
+BuildRequires:	libblkid-devel
+BuildRequires:	audit-devel
 Requires(post):    chkconfig
 Requires(pre):     chkconfig
-Requires:	procps gawk
-
-BuildRequires:	libblkid-devel audit-devel
-
+Requires:	procps
+Requires:	gawk
 Obsoletes:	kernel-utils
+Buildroot:      %{_tmppath}/%{name}-%{version}-buildroot
 
 %description
 readahead reads the contents of a list of files into memory,
@@ -35,42 +35,27 @@ needed. Its goal is to speed up the boot process.
 install -m644 %{SOURCE2} lists/
 
 %build
-%configure2_5x --sbindir=/sbin
-%make 
+%configure2_5x \
+	--sbindir=/sbin \
+	--disable-rpath
+%make
 make rpm-lists-rebuild FILES="default.early" RPM_LIB="%{_lib}" RPM_ARCH="%{_arch}"
 
 
 %install
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 %makeinstall_std
 %find_lang %{name}
 
-install -m755 %{SOURCE1} $RPM_BUILD_ROOT/sbin
-install -m755 %{SOURCE1} $RPM_BUILD_ROOT/sbin/readahead_later
-sed -i -e 's/early/later/g' $RPM_BUILD_ROOT/sbin/readahead_later
+install -m755 %{SOURCE1} %{buildroot}/sbin
+install -m755 %{SOURCE1} %{buildroot}/sbin/readahead_later
+sed -i -e 's/early/later/g' %{buildroot}/sbin/readahead_later
 
-mkdir -p $RPM_BUILD_ROOT%{_var}/lib/readahead
-install -m644 lists/default.early $RPM_BUILD_ROOT%{_var}/lib/readahead
+mkdir -p %{buildroot}%{_var}/lib/readahead
+install -m644 lists/default.early %{buildroot}%{_var}/lib/readahead
 
 # we don't use upstart
-rm -fr $RPM_BUILD_ROOT/etc/event.d
-
-%clean
-[ "$RPM_BUILD_ROOT" != "/" ] && [ -d $RPM_BUILD_ROOT ] && rm -rf $RPM_BUILD_ROOT;
-
-%files -f %{name}.lang
-%defattr(-,root,root)
-%doc COPYING README lists/README.lists 
-/sbin/readahead
-/sbin/readahead-collector
-/sbin/readahead_early
-/sbin/readahead_later
-/etc/cron.daily/readahead.cron
-/etc/cron.monthly/readahead-monthly.cron
-%config(noreplace) %{_sysconfdir}/sysconfig/readahead
-%config(noreplace) /etc/readahead.conf
-%dir /var/lib/readahead
-%attr(0644,root,root) %{_var}/lib/readahead/default.early
+rm -fr %{buildroot}/etc/event.d
 
 %pre
 if [ -f /etc/rc.d/init.d/readahead_early ]; then
@@ -82,3 +67,20 @@ fi
 if [ "$1" = "1" ]; then
  touch /.readahead_collect
 fi
+
+%clean
+rm -rf %{buildroot}
+
+%files -f %{name}.lang
+%defattr(-,root,root)
+%doc README lists/README.lists
+/sbin/readahead
+/sbin/readahead-collector
+/sbin/readahead_early
+/sbin/readahead_later
+/etc/cron.daily/readahead.cron
+/etc/cron.monthly/readahead-monthly.cron
+%config(noreplace) %{_sysconfdir}/sysconfig/readahead
+%config(noreplace) /etc/readahead.conf
+%dir /var/lib/readahead
+%attr(0644,root,root) %{_var}/lib/readahead/default.early
