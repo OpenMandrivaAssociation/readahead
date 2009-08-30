@@ -16,6 +16,7 @@ Patch0:		readahead-default.patch
 Patch1:		readahead-1.4.6-autocollector.patch
 BuildRequires:	libblkid-devel
 BuildRequires:	audit-devel
+BuildRequires:	libext2fs-devel
 Requires(post):    chkconfig
 Requires(pre):     chkconfig
 Requires:	procps
