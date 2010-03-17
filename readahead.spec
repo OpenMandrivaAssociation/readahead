@@ -3,7 +3,7 @@
 Summary:        Read a preset list of files into memory
 Name:           readahead
 Version:        1.5.4
-Release:        %mkrel 2
+Release:        %mkrel 3
 Group:          System/Configuration/Boot and Init
 License:        GPLv2+
 URL:		https://hosted.fedoraproject.org/readahead
@@ -16,6 +16,7 @@ Patch0:		readahead-default.patch
 Patch1:		readahead-1.4.6-autocollector.patch
 BuildRequires:	libblkid-devel
 BuildRequires:	audit-devel
+BuildRequires:	auparse-devel
 BuildRequires:	libext2fs-devel
 Requires(post):    chkconfig
 Requires(pre):     chkconfig
