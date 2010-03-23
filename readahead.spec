@@ -3,7 +3,7 @@
 Summary:        Read a preset list of files into memory
 Name:           readahead
 Version:        1.5.4
-Release:        %mkrel 3
+Release:        %mkrel 4
 Group:          System/Configuration/Boot and Init
 License:        GPLv2+
 URL:		https://hosted.fedoraproject.org/readahead
@@ -14,6 +14,8 @@ Source2:	default.early
 Patch0:		readahead-default.patch
 # (fc) 1.4.6-2mdv create a temp file to detect if collector is running, autodelect collector enabling file at end of collection
 Patch1:		readahead-1.4.6-autocollector.patch
+# (blino) properly kill daemon when audit is not available
+Patch2:		readahead-1.4.9-properexit.patch
 BuildRequires:	libblkid-devel
 BuildRequires:	audit-devel
 BuildRequires:	auparse-devel
@@ -34,6 +36,7 @@ needed. Its goal is to speed up the boot process.
 %setup -q
 %patch0 -p1 -b .default
 %patch1 -p1 -b .autocollector
+%patch2 -p1 -b .properexit
 install -m644 %{SOURCE2} lists/
 
 %build
