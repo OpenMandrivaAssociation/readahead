@@ -3,7 +3,7 @@
 Summary:        Read a preset list of files into memory
 Name:           readahead
 Version:        1.5.4
-Release:        %mkrel 4
+Release:        %mkrel 5
 Group:          System/Configuration/Boot and Init
 License:        GPLv2+
 URL:		https://hosted.fedoraproject.org/readahead
@@ -26,6 +26,8 @@ Requires:	procps
 Requires:	gawk
 Obsoletes:	kernel-utils
 Buildroot:      %{_tmppath}/%{name}-%{version}-buildroot
+# easy upgrade from 2009.1 to 2010.1
+Conflicts:	%mklibname audit 0
 
 %description
 readahead reads the contents of a list of files into memory,
