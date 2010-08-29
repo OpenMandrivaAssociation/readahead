@@ -2,8 +2,8 @@
 
 Summary:        Read a preset list of files into memory
 Name:           readahead
-Version:        1.5.4
-Release:        %mkrel 5
+Version:        1.5.6
+Release:        %mkrel 1
 Group:          System/Configuration/Boot and Init
 License:        GPLv2+
 URL:		https://hosted.fedoraproject.org/readahead
@@ -13,9 +13,8 @@ Source2:	default.early
 # (fc) 1.4.6-2mdv default values for Mandriva
 Patch0:		readahead-default.patch
 # (fc) 1.4.6-2mdv create a temp file to detect if collector is running, autodelect collector enabling file at end of collection
-Patch1:		readahead-1.4.6-autocollector.patch
-# (blino) properly kill daemon when audit is not available
-Patch2:		readahead-1.4.9-properexit.patch
+Patch1:		readahead-1.5.6-autocollector.patch
+Patch3:		readahead-1.5.6-fix-missing-separator.patch
 BuildRequires:	libblkid-devel
 BuildRequires:	audit-devel
 BuildRequires:	auparse-devel
@@ -24,10 +23,11 @@ Requires(post):    chkconfig
 Requires(pre):     chkconfig
 Requires:	procps
 Requires:	gawk
+Requires:	util-linux-ng
 Obsoletes:	kernel-utils
-Buildroot:      %{_tmppath}/%{name}-%{version}-buildroot
 # easy upgrade from 2009.1 to 2010.1
 Conflicts:	%mklibname audit 0
+Buildroot:      %{_tmppath}/%{name}-%{version}-buildroot
 
 %description
 readahead reads the contents of a list of files into memory,
@@ -38,14 +38,16 @@ needed. Its goal is to speed up the boot process.
 %setup -q
 %patch0 -p1 -b .default
 %patch1 -p1 -b .autocollector
-%patch2 -p1 -b .properexit
+%patch3 -p1
 install -m644 %{SOURCE2} lists/
 
 %build
 %configure2_5x \
 	--sbindir=/sbin \
 	--disable-rpath
+
 %make
+
 make rpm-lists-rebuild FILES="default.early" RPM_LIB="%{_lib}" RPM_ARCH="%{_arch}"
 
 
@@ -62,7 +64,8 @@ mkdir -p %{buildroot}%{_var}/lib/readahead
 install -m644 lists/default.early %{buildroot}%{_var}/lib/readahead
 
 # we don't use upstart
-rm -fr %{buildroot}/etc/event.d
+rm -rf %{buildroot}/etc/event.d
+rm -rf  %{_sysconfdir}/init/*.conf
 
 %pre
 if [ -f /etc/rc.d/init.d/readahead_early ]; then
@@ -88,6 +91,6 @@ rm -rf %{buildroot}
 /etc/cron.daily/readahead.cron
 /etc/cron.monthly/readahead-monthly.cron
 %config(noreplace) %{_sysconfdir}/sysconfig/readahead
-%config(noreplace) /etc/readahead.conf
+%config(noreplace) %{_sysconfdir}/readahead.conf
 %dir /var/lib/readahead
 %attr(0644,root,root) %{_var}/lib/readahead/default.early
