@@ -65,7 +65,7 @@ install -m644 lists/default.early %{buildroot}%{_var}/lib/readahead
 
 # we don't use upstart
 rm -rf %{buildroot}/etc/event.d
-rm -rf  %{_sysconfdir}/init/*.conf
+rm -rf %{buildroot}%{_sysconfdir}/init
 
 %pre
 if [ -f /etc/rc.d/init.d/readahead_early ]; then
