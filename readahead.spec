@@ -3,7 +3,7 @@
 Summary:        Read a preset list of files into memory
 Name:           readahead
 Version:        1.5.7
-Release:        %mkrel 1
+Release:        %mkrel 2
 Group:          System/Configuration/Boot and Init
 License:        GPLv2+
 URL:		https://hosted.fedoraproject.org/readahead
@@ -65,6 +65,8 @@ install -m644 lists/default.early %{buildroot}%{_var}/lib/readahead
 rm -rf %{buildroot}/etc/event.d
 rm -rf %{buildroot}%{_sysconfdir}/init
 
+# (bor) disable for now, it is done in rc.sysinit
+rm -rf %{buildroot}/lib/systemd/system/default.target.wants
 %pre
 if [ -f /etc/rc.d/init.d/readahead_early ]; then
   /sbin/chkconfig --del readahead_early > /dev/null 2>&1 
@@ -93,5 +95,6 @@ rm -rf %{buildroot}
 %dir /var/lib/readahead
 %attr(0644,root,root) %{_var}/lib/readahead/default.early
 /lib/readahead/%{name}-*.sh
-/lib/systemd/system/default.target.wants/readahead-*.service
+# (bor) disable for now, it is done in rc.sysinit
+#/lib/systemd/system/default.target.wants/readahead-*.service
 /lib/systemd/system/readahead-*.service
