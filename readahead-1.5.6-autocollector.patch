@@ -1,0 +1,34 @@
+diff -Naur readahead-1.5.6//src/readahead-collector.c readahead-1.5.6.tpg//src/readahead-collector.c
+--- readahead-1.5.6//src/readahead-collector.c	2010-03-24 15:44:32.000000000 +0000
++++ readahead-1.5.6.tpg//src/readahead-collector.c	2010-08-29 11:45:03.000000000 +0000
+@@ -201,7 +201,7 @@
+ 	struct auditd_reply_list *rep = NULL;
+ 	fd_set read_mask;
+ 	struct sigaction sa;
+-	int i;
++	int i, fd;
+ 	char *p;
+ 
+ 	debug_out = stderr;
+@@ -285,6 +285,11 @@
+ 	/* At exit cleanups */
+ 	atexit(clean_audit);
+ 
++	fd = creat ("/dev/.readahead_collect", S_IRUSR|S_IWUSR|S_IROTH|S_IRGRP);
++	if (fd != -1) {
++		close (fd);
++	}
++
+ 	/* Open way to audit */
+ 	if ((audit_fd = audit_open()) < 0) {
+ 		daemon_child_status(CHILD_FAILURE);
+@@ -388,6 +393,9 @@
+ 
+ 	if (has_debug && is_background(rac) && debug_out != stderr)
+ 		fclose(debug_out);
++	unlink ("/.readahead_collect");
++	unlink ("/dev/.readahead_collect");
++	system ("/etc/cron.daily/readahead.cron");
+ 
+ 	exit(EXIT_SUCCESS);
+ }

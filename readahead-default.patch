@@ -1,0 +1,29 @@
+diff -Naur readahead-1.5.0/src/readahead.conf readahead-1.5.0.tpg/src/readahead.conf
+--- readahead-1.5.0/src/readahead.conf	2009-08-13 09:51:10.000000000 +0000
++++ readahead-1.5.0.tpg/src/readahead.conf	2009-08-30 14:46:52.000000000 +0000
+@@ -8,7 +8,7 @@
+ #RAC_RAWLOG="/var/log/readahead-rac.log"
+ 
+ # Rac automatically finish after N seconds
+-RAC_MAXTIME="300"
++RAC_MAXTIME="90"
+ 
+ # Path to init process
+ RAC_INITPATH="/sbin/init"
+@@ -21,13 +21,13 @@
+ RAC_EXECIGN="/sbin/readahead"
+ 
+ # Exclude dirs
+-RAC_EXCLUDE="/proc /sys /dev /var /home /tmp /media /selinux /mnt /usr/src /usr/include /lib/modules /usr/lib/gcc /usr/lib64/gcc  /usr/lib/locale /usr/libexec/gcc"
++RAC_EXCLUDE="/proc /sys /dev /var /home /tmp /media /selinux /mnt /usr/src /usr/include /lib/modules /usr/lib/gcc /usr/lib64/gcc /usr/lib/locale /usr/libexec/gcc /var/cache/urpmi"
+ 
+ # A first filename in the list
+-# RAC_LISTBEGIN="/etc/rc.d/init.d/readahead_early"
++RAC_LISTBEGIN="/dev/null"
+ 
+ # A filename which is a separator between early and later readahead
+-# RAC_LISTSEP="/etc/rc.d/init.d/readahead_later"
++RAC_LISTSEP="/etc/X11/xsetup.d/90speedboot.xsetup"
+ 
+ # On/Off debug mode (see also "-d" option)
+ RAC_DEBUG="off"
