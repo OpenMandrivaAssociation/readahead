@@ -1,0 +1,37 @@
+#!/bin/sh
+
+# Sanity checks.
+[ -x /sbin/readahead ] || exit 0
+
+#[ -f /.autofsck ] && exit 0
+[ -f /forcefsck ] && exit 0
+
+# Check for > 384 MB
+free -m | gawk '/Mem:/ {exit ($2 >= 384)?0:1}' || exit 0
+
+. /etc/sysconfig/readahead
+
+[ x"$READAHEAD" = "xyes" ] || exit 0
+
+RETVAL=0
+READAHEAD_CMD="/sbin/readahead"
+
+LTYPE="early"
+READAHEAD_BASE="/var/lib/readahead"
+
+[ -d "$READAHEAD_BASE" ] || return 6
+
+echo -n $"Starting background readahead ($LTYPE, "
+
+if [ -s "$READAHEAD_BASE/$LTYPE.sorted" ]; then
+    echo $"fast mode) "
+    $READAHEAD_CMD --dont-sort $READAHEAD_BASE/$LTYPE.sorted >/dev/null
+elif [ -s "$READAHEAD_BASE/custom.$LTYPE" ]; then
+    echo $"customized) "
+    $READAHEAD_CMD $READAHEAD_BASE/custom.$LTYPE >/dev/null
+else
+    echo $"full mode) "
+    $READAHEAD_CMD $READAHEAD_BASE/*.$LTYPE >/dev/null
+fi
+
+exit 0
