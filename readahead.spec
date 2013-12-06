@@ -3,7 +3,7 @@
 Summary:        Read a preset list of files into memory
 Name:           readahead
 Version:        1.5.7
-Release:        9
+Release:        10
 Group:          System/Configuration/Boot and Init
 License:        GPLv2+
 URL:		https://hosted.fedoraproject.org/readahead
